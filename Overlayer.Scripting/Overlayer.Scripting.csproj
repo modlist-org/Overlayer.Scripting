@@ -51,7 +51,10 @@
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\DOTweenPro.dll</HintPath>
     </Reference>
     <Reference Include="JSNet">
-      <HintPath>..\Lib\JSNet.dll</HintPath>
+      <HintPath>..\lib\JSNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Overlayer">
+      <HintPath>..\..\Overlayer\Overlayer\bin\Release\Overlayer.dll</HintPath>
     </Reference>
     <Reference Include="RDTools">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\RDTools.dll</HintPath>
@@ -375,12 +378,6 @@
     <Compile Include="Expression.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Sound.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Overlayer\Overlayer.csproj">
-      <Project>{a10da92a-c5bb-4708-b1b4-9a112a644d8c}</Project>
-      <Name>Overlayer</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="MiscFiles\info.json" />
