@@ -1,0 +1,16 @@
+{
+  "English": {
+    "0KTL_SCRIPTING": "DO_NOT_TRANSLATE_THIS",
+    "0TRANSLATORS": [
+      "OVERLAYER"
+    ],
+    "EVALUATE": "Evaluate",
+    "EXECUTE": "Execute",
+    "NOT_EXCUTED": "Not Executed.",
+    "PERFORMANCE_STATUS_UPDATE_RATE": "Performance Status Update Rate",
+    "RELOAD_SCRIPTS": "Reload Scripts",
+    "RESULT": "Result",
+    "SUCCESS": "Success",
+    "TEST_CODE": "Test Code"
+  }
+}

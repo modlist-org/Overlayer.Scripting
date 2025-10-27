@@ -384,11 +384,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="MiscFiles\lang\English.json" />
+    <None Include="MiscFiles\lang\Korean.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\Mods\Overlayer.Scripting\Overlayer.Scripting.dll"
-xcopy /Y /I "$(ProjectDir)MiscFiles\info.json" "C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\Mods\Overlayer.Scripting\"</PostBuildEvent>
+xcopy /Y /I /S /E "$(ProjectDir)MiscFiles\lang\*" "C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\Mods\Overlayer.Scripting\lang\"
+xcopy /Y /I "$(ProjectDir)MiscFiles\info.json" "C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\Mods\Overlayer.Scripting\"
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

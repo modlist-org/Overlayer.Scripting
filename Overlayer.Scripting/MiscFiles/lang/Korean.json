@@ -1,0 +1,16 @@
+{
+  "한국어": {
+    "0KTL_SCRIPTING": "DO_NOT_TRANSLATE_THIS",
+    "0TRANSLATORS": [
+      "OVERLAYER"
+    ],
+    "EVALUATE": "실행하고 출력 보기",
+    "EXECUTE": "실행",
+    "NOT_EXCUTED": "실행되지 않음.",
+    "PERFORMANCE_STATUS_UPDATE_RATE": "성능 상태 업데이트 주기",
+    "RELOAD_SCRIPTS": "스크립트 다시 불러오기",
+    "RESULT": "결과",
+    "SUCCESS": "성공",
+    "TEST_CODE": "시험 코드"
+  }
+}
