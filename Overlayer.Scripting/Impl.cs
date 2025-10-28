@@ -8,7 +8,7 @@ using Jint.Runtime.Interop;
 using Jint.Runtime.Interop.Attributes;
 using JSNet.API;
 using JSNet.Utils;
-using JSON;
+using Newtonsoft.Json.Linq;
 using Overlayer.Core;
 using Overlayer.Core.Patches;
 using Overlayer.Core.TextReplacing;
@@ -505,9 +505,10 @@ namespace Overlayer.Scripting
             return TextManager.CreateText(new TextConfig());
         }
         [Api("createTextFromJson")]
-        public static OverlayerText CreateTextFromJson(string json)
-        {
-            return TextManager.CreateText(TextConfigImporter.Import(JsonNode.Parse(json)));
+        public static OverlayerText CreateTextFromJson(string json) {
+            var token = JToken.Parse(json);
+            var config = TextConfigImporter.Import(token);
+            return TextManager.CreateText(config);
         }
         [Api("createTexture", RequireTypes = new[] { typeof(Texture2D) })]
         public static Texture2D CreateTexture(string imagePath)
