@@ -404,25 +404,10 @@ namespace Overlayer.Scripting
             harmony.Patch(target, transpiler: new HarmonyMethod(wrap));
             return true;
         }*/
-        [Api("isNoFailMode")]
-        public static bool IsNoFailMode(Engine engine)
-        {
-            return scrController.instance?.noFail ?? false;
-        }
         [Api("getLanguage", RequireTypes = new[] { typeof(SystemLanguage) })]
         public static SystemLanguage GetLanguage(Engine engine)
         {
             return RDString.language;
-        }
-        [Api("isAutoEnabled")]
-        public static bool IsAutoEnabled(Engine engine)
-        {
-            return RDC.auto;
-        }
-        [Api("isWeakAutoEnabled")]
-        public static bool IsWeakAutoEnabled(Engine engine)
-        {
-            return RDC.useOldAuto;
         }
         [Api("ease", RequireTypes = new Type[] { typeof(Ease) })]
         public static float EasedValue(Engine engine, Ease ease, float lifetime)
