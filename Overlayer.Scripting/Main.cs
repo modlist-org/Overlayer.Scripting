@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using Overlayer.Core;
 using Overlayer.Core.Patches;
 using Overlayer.Core.TextReplacing;
-using Overlayer.Core.Translatior;
+using Overlayer.Core.Translation;
 using Overlayer.Tags;
 using Overlayer.Unity;
 using Overlayer.Utils;
@@ -55,20 +55,14 @@ namespace Overlayer.Scripting
             modEntry.OnToggle = OnToggle;
             modEntry.OnGUI = OnGUI;
             modEntry.OnSaveGUI = OnSaveGUI;
-
-            Lang.OnInitialize += OnLanguageInitialize;
-        }
-
-        public static void OnLanguageInitialize() {
-            SandboxResult = Lang.Get("NOT_EXCUTED", "Not Executed.");
         }
 
         public static bool OnToggle(ModEntry modEntry, bool toggle)
         {
             if(toggle) {
                 Settings = ModSettings.Load<Settings>(modEntry);
-                Lang.CurrentLanguage = Overlayer.Main.Settings.Lang;
-                _ = Lang.LoadTranslationsAsync(Path.Combine(Mod.Path, "lang"));
+                Lang.Language = Overlayer.Main.Settings.Lang;
+                _ = Lang.Load(Path.Combine(Mod.Path, "lang"));
 
                 TagManager.Load(typeof(Expression));
                 TagManager.Load(typeof(PerformanceTags));
@@ -100,6 +94,7 @@ namespace Overlayer.Scripting
                 TagManager.Unload(typeof(PerformanceTags));
                 Impl.Release();
                 JSApi = null;
+                Lang.Release();
                 ModSettings.Save(Settings, modEntry);
             }
             Expression.expressions.Clear();
@@ -107,15 +102,14 @@ namespace Overlayer.Scripting
             return true;
         }
         static string SandboxJSCode = string.Empty;
-        static string SandboxResult;
+        static string SandboxResult = "...";
 
         public static float preparinglastUpdateTime = 0f;
         public static string[] preparingsymbols = { "-", "\\", "|", "/" };
         public static int preparingsymbolIndex = 0;
-        public static float helptime = 0f;
         public static void OnGUI(ModEntry modEntry)
         {
-            if(Lang.GetLoading()) {
+            if(Lang.IsLoading) {
                 float elapsedTime = Time.time - preparinglastUpdateTime;
 
                 if(elapsedTime >= 0.05f) {
@@ -126,50 +120,42 @@ namespace Overlayer.Scripting
                     preparinglastUpdateTime = Time.time;
                 }
 
-                GUILayout.Label("Language Preparing " + preparingsymbols[preparingsymbolIndex]);
-
-                helptime += Time.deltaTime;
-                if(helptime >= 4f) {
-                    GUILayout.Label("Is the Language Preparing is taking too long??\nplease get in touch with the developer for assistance!!");
-                } else {
-                    GUILayout.Label("");
-                }
-            } else {
-                GUILayout.BeginHorizontal();
-                if(Drawer.Button(Lang.Get("RELOAD_SCRIPTS", "Reload Scripts")))
-                    RunScriptsNonBlocking();
-                GUILayout.FlexibleSpace();
-                GUILayout.EndHorizontal();
-                GUILayout.Label(Lang.Get("TEST_CODE", "Test Code") + ":");
-                SandboxJSCode = GUILayout.TextArea(SandboxJSCode, Drawer.myTextField);
-                GUILayout.BeginHorizontal();
-                if(Drawer.Button(Lang.Get("EXECUTE", "Execute"))) {
-                    Exception e;
-                    MiscUtils.ExecuteSafe(() => {
-                        BeginScript(true);
-                        MiscUtils.ExecuteSafe(() => JSApi.PrepareInterpreter().Evaluate(JSUtils.RemoveImports(SandboxJSCode)), out e);
-                        SandboxResult = e?.ToString() ?? Lang.Get("SUCCESS", "Success");
-                    }, out e);
-                    if(e != null)
-                        SandboxResult = e.ToString();
-                    EndScript();
-                }
-                if(Drawer.Button(Lang.Get("EVALUATE", "Evaluate"))) {
-                    Exception e;
-                    MiscUtils.ExecuteSafe(() => {
-                        BeginScript(true);
-                        var result = MiscUtils.ExecuteSafe(() => JSApi.PrepareInterpreter().Evaluate(JSUtils.RemoveImports(SandboxJSCode)), out e);
-                        SandboxResult = e?.ToString() ?? result?.ToString() ?? "null";
-                    }, out e);
-                    if(e != null)
-                        SandboxResult = e.ToString();
-                    EndScript();
-                }
-                GUILayout.FlexibleSpace();
-                GUILayout.EndHorizontal();
-                GUILayout.Label($"{Lang.Get("RESULT", "Result")}:\n{SandboxResult}");
-                Drawer.DrawInt32(Lang.Get("PERFORMANCE_STATUS_UPDATE_RATE", "Performance Status Update Rate"), ref Settings.PerfStatUpdateRate);
+                GUILayout.Label("Language Preparing... " + preparingsymbols[preparingsymbolIndex]);
             }
+            GUILayout.BeginHorizontal();
+            if(Drawer.Button(Lang.Get("RELOAD_SCRIPTS", "Reload Scripts")))
+                RunScriptsNonBlocking();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            GUILayout.Label(Lang.Get("TEST_CODE", "Test Code") + ":");
+            SandboxJSCode = GUILayout.TextArea(SandboxJSCode, Drawer.myTextField);
+            GUILayout.BeginHorizontal();
+            if(Drawer.Button(Lang.Get("EXECUTE", "Execute"))) {
+                Exception e;
+                MiscUtils.ExecuteSafe(() => {
+                    BeginScript(true);
+                    MiscUtils.ExecuteSafe(() => JSApi.PrepareInterpreter().Evaluate(JSUtils.RemoveImports(SandboxJSCode)), out e);
+                    SandboxResult = e?.ToString() ?? Lang.Get("SUCCESS", "Success");
+                }, out e);
+                if(e != null)
+                    SandboxResult = e.ToString();
+                EndScript();
+            }
+            if(Drawer.Button(Lang.Get("EVALUATE", "Evaluate"))) {
+                Exception e;
+                MiscUtils.ExecuteSafe(() => {
+                    BeginScript(true);
+                    var result = MiscUtils.ExecuteSafe(() => JSApi.PrepareInterpreter().Evaluate(JSUtils.RemoveImports(SandboxJSCode)), out e);
+                    SandboxResult = e?.ToString() ?? result?.ToString() ?? "null";
+                }, out e);
+                if(e != null)
+                    SandboxResult = e.ToString();
+                EndScript();
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            GUILayout.Label($"{Lang.Get("RESULT", "Result")}:\n{SandboxResult}");
+            Drawer.DrawInt32(Lang.Get("PERFORMANCE_STATUS_UPDATE_RATE", "Performance Status Update Rate"), ref Settings.PerfStatUpdateRate);
         }
         public static void OnSaveGUI(ModEntry modEntry)
         {

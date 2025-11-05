@@ -389,8 +389,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="MiscFiles\lang\English.json" />
-    <None Include="MiscFiles\lang\Korean.json" />
+    <None Include="MiscFiles\lang\en-US.json" />
+    <None Include="MiscFiles\lang\ko-KR.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
