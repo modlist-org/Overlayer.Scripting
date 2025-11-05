@@ -2,7 +2,7 @@
   "Id": "Overlayer.Scripting",
   "DisplayName": "Overlayer.Scripting",
   "Author": "Square & Kkitut",
-  "Version": "1.10.0",
+  "Version": "1.11.0",
   "AssemblyName": "Overlayer.Scripting.Bootstrapper.dll",
   "EntryMethod": "Overlayer.Scripting.Bootstrapper.Main.Load",
   "Requirements": [ "Overlayer" ],
