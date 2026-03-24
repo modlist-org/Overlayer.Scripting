@@ -408,29 +408,31 @@ public static class Impl {
     [Api("getText")]
     public static OverlayerText GetText(int index, OverlayerProfile profile = null) {
         profile ??= ProfileManager.Profiles.FirstOrDefault(p => p.Config.Active);
-        return profile == null ? null : index < 0 || index >= profile.TextManager.Count ? null : profile.TextManager.Get(index);
+        if(profile == null) {
+            return null;
+        }
+        object obj = index < 0 || index >= profile.ObjectManager.Count ? null : profile.ObjectManager.Get(index);
+        return obj as OverlayerText;
     }
-
     [Api("getTextByName")]
     public static OverlayerText GetTextByName(string name, OverlayerProfile profile = null) {
         profile ??= ProfileManager.Profiles.FirstOrDefault(p => p.Config.Active);
         if(profile == null) {
             return null;
         }
-
-        for(int i = 0; i < profile.TextManager.Count; i++) {
-            var text = profile.TextManager.Get(i);
-            if(text.Config.Name == name) {
+        for(int i = 0; i < profile.ObjectManager.Count; i++) {
+            object obj = profile.ObjectManager.Get(i);
+            if(obj is OverlayerText text && text.Config.Name == name) {
                 return text;
             }
         }
         return null;
     }
-
     [Api("createText")]
     public static OverlayerText CreateText(OverlayerProfile profile = null) {
         profile ??= ProfileManager.Profiles.FirstOrDefault(p => p.Config.Active);
-        return profile?.TextManager.Create(new TextConfig());
+        object obj = profile?.ObjectManager.Create(new TextConfig());
+        return obj as OverlayerText;
     }
 
     [Api("createTextFromJson")]
@@ -442,7 +444,7 @@ public static class Impl {
 
         var token = JToken.Parse(json);
         var config = TextConfigImporter.Import(token);
-        return profile.TextManager.Create(config);
+        return profile.ObjectManager.Create(config);
     }
     [Api("createTexture", RequireTypes = new[] { typeof(Texture2D) })]
     public static Texture2D CreateTexture(string imagePath) {

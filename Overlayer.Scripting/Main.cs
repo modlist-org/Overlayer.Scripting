@@ -42,6 +42,8 @@ public static class Main {
     public static bool PatchesLocked { get; private set; }
     public static Translator Lang { get; internal set; }
 
+    internal static NeoDrawer NeoDrawer = new();
+
     public static void Load(ModEntry modEntry) {
         Mod = modEntry;
         Logger = modEntry.Logger;
@@ -156,7 +158,7 @@ public static class Main {
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
         GUILayout.Label($"{Lang.Get("RESULT", "Result")}:\n{SandboxResult}");
-        Drawer.DrawInt32(Lang.Get("PERFORMANCE_STATUS_UPDATE_RATE", "Performance Status Update Rate"), ref Settings.PerfStatUpdateRate);
+        NeoDrawer.DrawInt32(Lang.Get("PERFORMANCE_STATUS_UPDATE_RATE", "Performance Status Update Rate"), ref Settings.PerfStatUpdateRate);
     }
     public static void OnSaveGUI(ModEntry modEntry) => ModSettings.Save(Settings, modEntry);
     public static async Task RunScripts() {
@@ -347,7 +349,7 @@ public static class Main {
         var node = JObject.Parse(Encoding.UTF8.GetString(raw.Decompress()));
 
         var texts = node["Texts"]
-            .Select(tc => profile.TextManager.Create(TextConfigImporter.Import(tc)))
+            .Select(tc => profile.ObjectManager.Create(TextConfigImporter.Import(tc)))
             .ToList();
 
         foreach(var script in node["Scripts"]) {
@@ -355,7 +357,7 @@ public static class Main {
             File.WriteAllText(Path.Combine(ScriptPath, (string)script["Name"]), (string)script["Script"]);
         }
 
-        profile.TextManager.Refresh();
+        profile.ObjectManager.Refresh();
         return texts;
     }
 
