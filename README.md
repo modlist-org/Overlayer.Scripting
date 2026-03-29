@@ -8,3 +8,7 @@ allowing you to implement custom tags and features using JavaScript.
 
 # 🖥️ Overlayer
 - [Overlayer](https://github.com/modlist-org/Overlayer) is the main repository for the Overlayer.Scripting mod
+
+# KST 03/30/2026
+- Overlayer.Scripting has been merged with Overlayer.  
+### Archived.
