@@ -1,3 +1,5 @@
+# DO NOT USE THIS MOD IN LATEST OVERLAYER
+
 <img src="ov3_scripting.png" width="25%" height="25%">  
 
 # 📜 Overlayer.Scripting
